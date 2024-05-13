@@ -7,15 +7,12 @@ fi
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
-echo '::group::🐶 Installing misspell ... https://github.com/client9/misspell'
-TEMP_PATH="$(mktemp -d)"
-PATH="${TEMP_PATH}:$PATH"
-wget -O - -q https://git.io/misspell | sh -s -- -b "${TEMP_PATH}"
+echo '::group::🔗💀 Installing linkspector ... https://github.com/UmbrellaDocs/linkspector'
+npm install -g @umbrelladocs/linkspector
 echo '::endgroup::'
 
-echo '::group:: Running misspell with reviewdog 🐶 ...'
-# shellcheck disable=SC2086
-misspell -locale="${INPUT_LOCALE}" . |
+echo '::group:: Running linkspector with reviewdog 🐶 ...'
+linkspector check -c "${INPUT_CONFIG_FILE}" -j |
   reviewdog -efm="%f:%l:%c: %m" \
     -name="${INPUT_TOOL_NAME}" \
     -reporter="${INPUT_REPORTER}" \

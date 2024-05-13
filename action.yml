@@ -1,7 +1,6 @@
-# TODO: replace `<linter-name>` and `<your-name>` with yours
-name: 'Run <linter-name> with reviewdog'
-description: '🐶 Run <linter-name> with reviewdog on pull requests to improve code review experience.'
-author: '<your-name>'
+name: 'Run Linkspector with reviewdog'
+description: '🐶 Run Linkspector with reviewdog on pull requests to improve code review experience.'
+author: 'Gaurav Nelson'
 inputs:
   github_token:
     description: 'GITHUB_TOKEN'
@@ -32,10 +31,11 @@ inputs:
   reviewdog_flags:
     description: 'Additional reviewdog flags.'
     default: ''
-  ### Flags for <linter-name> ###
-  locale:
-    description: '-locale flag of misspell. (US/UK)'
-    default: ''
+  ### Flags for Linkspector ###
+  config_file:
+    description: 'Specify the path for the Linkspector YML configuration file.'
+    required: true
+    default: '.linkspector.yml'
 runs:
   using: 'composite'
   steps:
@@ -45,8 +45,6 @@ runs:
     - run: $GITHUB_ACTION_PATH/script.sh
       shell: bash
       env:
-        # INPUT_<VARIABLE_NAME> is not available in Composite run steps
-        # https://github.community/t/input-variable-name-is-not-available-in-composite-run-steps/127611
         INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
         INPUT_WORKDIR: ${{ inputs.workdir }}
         INPUT_TOOL_NAME: ${{ inputs.tool_name }}
@@ -55,10 +53,7 @@ runs:
         INPUT_FILTER_MODE: ${{ inputs.filter_mode }}
         INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
         INPUT_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
-        INPUT_LOCALE: ${{ inputs.locale }}
-
-# Ref: https://haya14busa.github.io/github-action-brandings/
-# TODO: update branding if you want.
+        INPUT_CONFIG_FILE: ${{ inputs.config_file }}
 branding:
-  icon: 'check'
+  icon: 'link-2'
   color: 'blue'
