@@ -30,7 +30,6 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-check
           level: error
-          workdir: ./testdata/subdir/
 
   test-pr-review:
     if: github.event_name == 'pull_request'
@@ -44,7 +43,6 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           level: error
-          filter_mode: file
           fail_on_error: true
       - name: check the exit code
         if: ${{ !success() }}

@@ -13,13 +13,13 @@ echo '::endgroup::'
 
 echo '::group:: Running linkspector with reviewdog 🐶 ...'
 linkspector check -c "${INPUT_CONFIG_FILE}" -j |
-  reviewdog -efm="%f:%l:%c: %m" \
+  reviewdog -f=rdjson \
     -name="${INPUT_TOOL_NAME}" \
     -reporter="${INPUT_REPORTER}" \
     -filter-mode="${INPUT_FILTER_MODE}" \
     -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
     -level="${INPUT_LEVEL}" \
-    ${INPUT_REVIEWDOG_FLAGS}
+    "${INPUT_REVIEWDOG_FLAGS}"
 exit_code=$?
 echo '::endgroup::'
 exit $exit_code

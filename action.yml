@@ -1,5 +1,5 @@
 name: 'Run Linkspector with reviewdog'
-description: '🐶 Run Linkspector with reviewdog on pull requests to improve code review experience.'
+description: 'Run 💀Linkspector with 🐶reviewdog on pull requests to uncover broken links in your content.'
 author: 'Gaurav Nelson'
 inputs:
   github_token:
@@ -11,7 +11,7 @@ inputs:
   ### Flags for reviewdog ###
   tool_name:
     description: 'Tool name to use for reviewdog reporter.'
-    default: '<linter-name>'
+    default: 'Linkspector'
   level:
     description: 'Report level for reviewdog [info,warning,error].'
     default: 'error'
