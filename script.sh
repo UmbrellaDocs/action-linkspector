@@ -8,8 +8,7 @@ fi
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
 echo '::group::🔗💀 Installing linkspector ... https://github.com/UmbrellaDocs/linkspector'
-npm install -g @umbrelladocs/linkspector@0.3.9
-echo '🔗💀 linkspector installed!'
+npm install -g @umbrelladocs/linkspector@0.3.10
 echo '🔗💀 linkspector version:'
 linkspector --version
 echo '::endgroup::'
