@@ -55,10 +55,10 @@ jobs:
       - name: Update script with new version
         if: env.NEW_VERSION_AVAILABLE == 'true'
         run: |
-          sed -i "s/@umbrelladocs\/linkspector@$CURRENT_VERSION/@umbrelladocs\/linkspector@$LATEST_VERSION/" your_script.sh
+          sed -i "s/@umbrelladocs\/linkspector@$CURRENT_VERSION/@umbrelladocs\/linkspector@$LATEST_VERSION/" script.sh
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add your_script.sh
+          git add script.sh
           git commit -m "Update linkspector version to $LATEST_VERSION"
 
       - name: Create Pull Request if new version is available
@@ -72,6 +72,6 @@ jobs:
           body: This PR updates the linkspector version to ${{ env.LATEST_VERSION }}
           labels: ${{ env.VERSION_BUMP }}
           files: |
-            your_script.sh
+            script.sh
         env:
           LATEST_VERSION: ${{ env.LATEST_VERSION }}
