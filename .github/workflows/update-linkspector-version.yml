@@ -1,0 +1,77 @@
+name: Check and Update Linkspector Version
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'  # Run every 12 hours
+  workflow_dispatch:
+
+jobs:
+  check-linkspector-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get current linkspector version from script
+        id: get_current_version
+        run: |
+          current_version=$(grep -oP '@umbrelladocs/linkspector@\K[0-9]+\.[0-9]+\.[0-9]+' your_script.sh)
+          echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV
+
+      - name: Fetch latest linkspector version from NPM
+        id: get_latest_version
+        run: |
+          latest_version=$(npm view @umbrelladocs/linkspector version)
+          echo "LATEST_VERSION=$latest_version" >> $GITHUB_ENV
+
+      - name: Compare versions and determine bump type
+        id: compare_versions
+        run: |
+          current_major=$(echo $CURRENT_VERSION | cut -d'.' -f1)
+          current_minor=$(echo $CURRENT_VERSION | cut -d'.' -f2)
+          current_patch=$(echo $CURRENT_VERSION | cut -d'.' -f3)
+
+          latest_major=$(echo $LATEST_VERSION | cut -d'.' -f1)
+          latest_minor=$(echo $LATEST_VERSION | cut -d'.' -f2)
+          latest_patch=$(echo $LATEST_VERSION | cut -d'.' -f3)
+
+          if [ "$LATEST_MAJOR" -ne "$CURRENT_MAJOR" ]; then
+            echo "VERSION_BUMP=major" >> $GITHUB_ENV
+          elif [ "$LATEST_MINOR" -ne "$CURRENT_MINOR" ]; then
+            echo "VERSION_BUMP=minor" >> $GITHUB_ENV
+          elif [ "$LATEST_PATCH" -ne "$CURRENT_PATCH" ]; then
+            echo "VERSION_BUMP=patch" >> $GITHUB_ENV
+          else
+            echo "VERSION_BUMP=none" >> $GITHUB_ENV
+          fi
+
+          if [ "$LATEST_VERSION" != "$CURRENT_VERSION" ]; then
+            echo "NEW_VERSION_AVAILABLE=true" >> $GITHUB_ENV
+          else
+            echo "NEW_VERSION_AVAILABLE=false" >> $GITHUB_ENV
+          fi
+
+      - name: Update script with new version
+        if: env.NEW_VERSION_AVAILABLE == 'true'
+        run: |
+          sed -i "s/@umbrelladocs\/linkspector@$CURRENT_VERSION/@umbrelladocs\/linkspector@$LATEST_VERSION/" your_script.sh
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add your_script.sh
+          git commit -m "Update linkspector version to $LATEST_VERSION"
+
+      - name: Create Pull Request if new version is available
+        if: env.NEW_VERSION_AVAILABLE == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Update linkspector version to ${{ env.LATEST_VERSION }}
+          branch: update-linkspector-version
+          title: Update linkspector version to ${{ env.LATEST_VERSION }}
+          body: This PR updates the linkspector version to ${{ env.LATEST_VERSION }}
+          labels: ${{ env.VERSION_BUMP }}
+          files: |
+            your_script.sh
+        env:
+          LATEST_VERSION: ${{ env.LATEST_VERSION }}
