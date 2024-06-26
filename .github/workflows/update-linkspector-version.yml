@@ -28,6 +28,9 @@ jobs:
       - name: Compare versions and determine bump type
         id: compare_versions
         run: |
+          echo "Current version: $CURRENT_VERSION"
+          echo "Latest version: $LATEST_VERSION"
+
           current_major=$(echo $CURRENT_VERSION | cut -d'.' -f1)
           current_minor=$(echo $CURRENT_VERSION | cut -d'.' -f2)
           current_patch=$(echo $CURRENT_VERSION | cut -d'.' -f3)
@@ -36,14 +39,22 @@ jobs:
           latest_minor=$(echo $LATEST_VERSION | cut -d'.' -f2)
           latest_patch=$(echo $LATEST_VERSION | cut -d'.' -f3)
 
-          if [ "$LATEST_MAJOR" -ne "$CURRENT_MAJOR" ]; then
-            echo "VERSION_BUMP=major" >> $GITHUB_ENV
-          elif [ "$LATEST_MINOR" -ne "$CURRENT_MINOR" ]; then
-            echo "VERSION_BUMP=minor" >> $GITHUB_ENV
-          elif [ "$LATEST_PATCH" -ne "$CURRENT_PATCH" ]; then
-            echo "VERSION_BUMP=patch" >> $GITHUB_ENV
+          echo "Current major: $current_major"
+          echo "Current minor: $current_minor"
+          echo "Current patch: $current_patch"
+
+          echo "Latest major: $latest_major"
+          echo "Latest minor: $latest_minor"
+          echo "Latest patch: $latest_patch"
+
+          if [ "$latest_major" -ne "$current_major" ]; then
+            echo "VERSION_BUMP=bump:major" >> $GITHUB_ENV
+          elif [ "$latest_minor" -ne "$current_minor" ]; then
+            echo "VERSION_BUMP=bump:minor" >> $GITHUB_ENV
+          elif [ "$latest_patch" -ne "$current_patch" ]; then
+            echo "VERSION_BUMP=bump:patch" >> $GITHUB_ENV
           else
-            echo "VERSION_BUMP=none" >> $GITHUB_ENV
+            echo "VERSION_BUMP=bump:patch" >> $GITHUB_ENV
           fi
 
           if [ "$LATEST_VERSION" != "$CURRENT_VERSION" ]; then
@@ -71,7 +82,5 @@ jobs:
           title: Update linkspector version to ${{ env.LATEST_VERSION }}
           body: This PR updates the linkspector version to ${{ env.LATEST_VERSION }}
           labels: ${{ env.VERSION_BUMP }}
-          files: |
-            script.sh
         env:
           LATEST_VERSION: ${{ env.LATEST_VERSION }}
