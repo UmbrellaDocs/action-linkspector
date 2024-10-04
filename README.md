@@ -1,3 +1,8 @@
+[![GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-action%20linkspector-brightgreen?style=for-the-badge)](https://github.com/marketplace/actions/run-linkspector-with-reviewdog)
+![GitHub Release](https://img.shields.io/github/v/release/UmbrellaDocs/action-linkspector?style=for-the-badge)
+
+<a href="https://liberapay.com/gaurav-nelson/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
+
 # GitHub action: Run 💀Linkspector with 🐶Reviewdog
 
 This action runs [Linkspector](https://github.com/UmbrellaDocs/linkspector) with [Reviewdog](https://github.com/reviewdog/reviewdog) on pull requests to improve the quality of your content.
