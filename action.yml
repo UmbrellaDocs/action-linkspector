@@ -39,9 +39,12 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
     - uses: reviewdog/action-setup@v1
       with:
-        reviewdog_version: v0.20.1
+        reviewdog_version: v0.20.2
     - run: $GITHUB_ACTION_PATH/script.sh
       shell: bash
       env:
