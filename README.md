@@ -62,6 +62,11 @@ For more details, please see [Filter mode support table](https://github.com/revi
 (Optional)  Exit code for reviewdog when errors are found with severity greater than or equal to the given level [none,any,info,warning,error].
 Default is `none`.
 
+### `fail_on_error`
+
+(Optional, deprecated) Exit code for reviewdog when errors are found [true,false]. This option is ignored if `fail_level` is used.
+Default is `false`.
+
 ### `reviewdog_flags`
 
 (Optional) Additional reviewdog flags.
