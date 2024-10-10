@@ -50,13 +50,17 @@ runs:
       with:
         reviewdog_version: v0.20.3
     - run: |
-        if [ -n "${{ inputs.fail_level }}" ]; then
-          echo "INPUT_FAIL_LEVEL=${{ inputs.fail_level }}" >> $GITHUB_ENV
-        elif [ "${{ inputs.fail_on_error }}" = 'true' ]; then
-            echo 'INPUT_FAIL_LEVEL=any' >> $GITHUB_ENV
-        else
-            echo 'INPUT_FAIL_LEVEL=none' >> $GITHUB_ENV
-        fi
+         if [ -n "${INPUT_FAIL_LEVEL}" ]; then
+             echo "INPUT_FAIL_LEVEL=${INPUT_FAIL_LEVEL}" >> "${GITHUB_ENV}"
+         elif [ "${INPUT_FAIL_ON_ERROR}" = "true" ]; then
+             echo "INPUT_FAIL_LEVEL=any" >> "${GITHUB_ENV}"
+         else
+             echo "INPUT_FAIL_LEVEL=none" >> "${GITHUB_ENV}"
+         fi
+      shell: bash
+      env:
+        INPUT_FAIL_LEVEL: ${{ inputs.fail_level }}
+        INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
     - run: $GITHUB_ACTION_PATH/script.sh
       shell: bash
       env:
