@@ -1,6 +1,5 @@
 [![GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-action%20linkspector-brightgreen?style=for-the-badge)](https://github.com/marketplace/actions/run-linkspector-with-reviewdog)
 ![GitHub Release](https://img.shields.io/github/v/release/UmbrellaDocs/action-linkspector?style=for-the-badge)
-
 <a href="https://liberapay.com/gaurav-nelson/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 
 # GitHub action: Run 💀Linkspector with 🐶Reviewdog
@@ -12,13 +11,15 @@ This action runs [Linkspector](https://github.com/UmbrellaDocs/linkspector) with
 1. Create a new file in your repository `.github/workflows/action.yml`.
 1. Copy-paste the following workflow in your `action.yml` file:
 
+   > **IMPORTANT**: Make sure to use `ubuntu-22.04` as the runner for this action. See https://github.com/UmbrellaDocs/action-linkspector/issues/25 for more details.
+
    ```yaml
    name: Linkspector
    on: [pull_request]
    jobs:
      check-links:
        name: runner / linkspector
-       runs-on: ubuntu-latest
+       runs-on: ubuntu-22.04
        steps:
          - uses: actions/checkout@v4
          - name: Run linkspector
