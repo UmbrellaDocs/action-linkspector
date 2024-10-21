@@ -11,15 +11,13 @@ This action runs [Linkspector](https://github.com/UmbrellaDocs/linkspector) with
 1. Create a new file in your repository `.github/workflows/action.yml`.
 1. Copy-paste the following workflow in your `action.yml` file:
 
-   > **IMPORTANT**: Make sure to use `ubuntu-22.04` as the runner for this action. See https://github.com/UmbrellaDocs/action-linkspector/issues/25 for more details.
-
    ```yaml
    name: Linkspector
    on: [pull_request]
    jobs:
      check-links:
        name: runner / linkspector
-       runs-on: ubuntu-22.04
+       runs-on: ubuntu-latest
        steps:
          - uses: actions/checkout@v4
          - name: Run linkspector

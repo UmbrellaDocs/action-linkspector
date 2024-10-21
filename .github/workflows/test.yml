@@ -10,7 +10,7 @@ on:
 jobs:
   test-check:
     name: runner / linkspector (github-check)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./
@@ -22,7 +22,7 @@ jobs:
   test-pr-check:
     if: github.event_name == 'pull_request'
     name: runner / linkspector (github-pr-check)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./
@@ -34,7 +34,7 @@ jobs:
   test-pr-review:
     if: github.event_name == 'pull_request'
     name: runner / linkspector (github-pr-review)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./

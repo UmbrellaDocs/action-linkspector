@@ -13,6 +13,15 @@ echo '🔗💀 linkspector version:'
 linkspector --version
 echo '::endgroup::'
 
+echo '::group::🔗💀 Setting up Chrome Linux Sandbox'
+# Based on the recommendation from https://pptr.dev/troubleshooting#recommended-enable-user-namespace-cloning
+if [ "$(lsb_release -rs)" = "24.04" ]; then
+  sudo sysctl -w kernel.unprivileged_userns_clone=1
+  echo 'Done'
+fi
+
+echo '::endgroup::'
+
 echo '::group:: Running linkspector with reviewdog 🐶 ...'
 linkspector check -c "${INPUT_CONFIG_FILE}" -j |
   reviewdog -f=rdjson \
