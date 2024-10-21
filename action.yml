@@ -23,9 +23,13 @@ inputs:
       Filtering mode for the reviewdog command [added,diff_context,file,nofilter].
       Default is added.
     default: 'added'
+  fail_level:
+      Exit code for reviewdog when errors are found with severity greater than or equal to the given level [none,any,info,warning,error].
+      Default is `none`.
+    default: ''
   fail_on_error:
     description: |
-      Exit code for reviewdog when errors are found [true,false].
+      (Deprecated) Exit code for reviewdog when errors are found [true,false]. This option is ignored if `fail_level` is used.
       Default is `false`.
     default: 'false'
   reviewdog_flags:
@@ -45,6 +49,18 @@ runs:
     - uses: reviewdog/action-setup@v1
       with:
         reviewdog_version: v0.20.2
+    - run: |
+         if [ -n "${INPUT_FAIL_LEVEL}" ]; then
+             echo "INPUT_FAIL_LEVEL=${INPUT_FAIL_LEVEL}" >> "${GITHUB_ENV}"
+         elif [ "${INPUT_FAIL_ON_ERROR}" = "true" ]; then
+             echo "INPUT_FAIL_LEVEL=any" >> "${GITHUB_ENV}"
+         else
+             echo "INPUT_FAIL_LEVEL=none" >> "${GITHUB_ENV}"
+         fi
+      shell: bash
+      env:
+        INPUT_FAIL_LEVEL: ${{ inputs.fail_level }}
+        INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
     - run: $GITHUB_ACTION_PATH/script.sh
       shell: bash
       env:
@@ -54,7 +70,7 @@ runs:
         INPUT_LEVEL: ${{ inputs.level }}
         INPUT_REPORTER: ${{ inputs.reporter }}
         INPUT_FILTER_MODE: ${{ inputs.filter_mode }}
-        INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
+        INPUT_FAIL_LEVEL: ${{ env.INPUT_FAIL_LEVEL }}
         INPUT_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
         INPUT_CONFIG_FILE: ${{ inputs.config_file }}
 branding:
