@@ -14,9 +14,9 @@ linkspector --version
 echo '::endgroup::'
 
 echo '::group::🔗💀 Setting up Chrome Linux Sandbox'
-# Based on the recommendation from https://pptr.dev/troubleshooting#recommended-enable-user-namespace-cloning
+# Based on the instructions found here: https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md
 if [ "$(lsb_release -rs)" = "24.04" ]; then
-  sudo sysctl -w kernel.unprivileged_userns_clone=1
+  echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
   echo 'Done'
 fi
 
