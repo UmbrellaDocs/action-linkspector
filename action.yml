@@ -1,43 +1,50 @@
-name: 'Run Linkspector with reviewdog'
-description: 'Run 💀Linkspector with 🐶reviewdog on pull requests to uncover broken links in your content.'
-author: 'Gaurav Nelson'
+---
+name: Run Linkspector with reviewdog
+description: Run 💀Linkspector with 🐶reviewdog on pull requests to uncover
+  broken links in your content.
+author: Gaurav Nelson
 inputs:
   github_token:
-    description: 'GITHUB_TOKEN'
-    default: '${{ github.token }}'
+    description: GITHUB_TOKEN
+    default: ${{ github.token }}
   workdir:
-    description: 'Working directory relative to the root directory.'
-    default: '.'
-  ### Flags for reviewdog ###
+    description: Working directory relative to the root directory.
+    default: .
   tool_name:
-    description: 'Tool name to use for reviewdog reporter.'
-    default: 'Linkspector'
+    description: Tool name to use for reviewdog reporter.
+    default: Linkspector
   level:
-    description: 'Report level for reviewdog [info,warning,error].'
-    default: 'error'
+    description: Report level for reviewdog [info,warning,error].
+    default: error
   reporter:
-    description: 'Reporter of reviewdog command [github-check,github-pr-review,github-pr-check].'
-    default: 'github-check'
+    description: Reporter of reviewdog command [github-check,github-pr-review,github-pr-check].
+    default: github-check
   filter_mode:
-    description: |
-      Filtering mode for the reviewdog command [added,diff_context,file,nofilter].
-      Default is added.
-    default: 'added'
+    description: >
+      Filtering mode for the reviewdog command
+      [added,diff_context,file,nofilter]. Default is added.
+    default: added
+  fail_level:
+    description: >
+      Exit code for reviewdog when errors are found with severity greater
+      than or equal to the given level [none,any,info,warning,error]. Default is
+      `none`.
+    default: ""
   fail_on_error:
-    description: |
-      Exit code for reviewdog when errors are found [true,false].
-      Default is `false`.
-    default: 'false'
+    description: >
+      (Deprecated) Exit code for reviewdog when errors are found
+      [true,false]. This option is ignored if you use `fail_level`. Default is
+      `false`.
+    default: "false"
   reviewdog_flags:
-    description: 'Additional reviewdog flags.'
-    default: ''
-  ### Flags for Linkspector ###
+    description: Additional reviewdog flags.
+    default: ""
   config_file:
-    description: 'Specify the path for the Linkspector YML configuration file.'
+    description: Specify the path for the Linkspector YML configuration file.
     required: true
-    default: '.linkspector.yml'
+    default: .linkspector.yml
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - uses: actions/setup-node@v4
       with:
@@ -45,6 +52,18 @@ runs:
     - uses: reviewdog/action-setup@v1
       with:
         reviewdog_version: v0.20.3
+    - run: |
+        if [ -n "${INPUT_FAIL_LEVEL}" ]; then
+            echo "INPUT_FAIL_LEVEL=${INPUT_FAIL_LEVEL}" >> "${GITHUB_ENV}"
+        elif [ "${INPUT_FAIL_ON_ERROR}" = "true" ]; then
+            echo "INPUT_FAIL_LEVEL=any" >> "${GITHUB_ENV}"
+        else
+            echo "INPUT_FAIL_LEVEL=none" >> "${GITHUB_ENV}"
+        fi
+      shell: bash
+      env:
+        INPUT_FAIL_LEVEL: ${{ inputs.fail_level }}
+        INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
     - run: $GITHUB_ACTION_PATH/script.sh
       shell: bash
       env:
@@ -54,9 +73,9 @@ runs:
         INPUT_LEVEL: ${{ inputs.level }}
         INPUT_REPORTER: ${{ inputs.reporter }}
         INPUT_FILTER_MODE: ${{ inputs.filter_mode }}
-        INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
+        INPUT_FAIL_LEVEL: ${{ env.INPUT_FAIL_LEVEL }}
         INPUT_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
         INPUT_CONFIG_FILE: ${{ inputs.config_file }}
 branding:
-  icon: 'link-2'
-  color: 'blue'
+  icon: link-2
+  color: blue
