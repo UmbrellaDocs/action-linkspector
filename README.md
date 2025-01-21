@@ -75,3 +75,16 @@ Default is `false`.
 
 (Optional) Path to your linkspector configuration file `.linkspector.yml`.
 For more details, see [Linkspector configuration](https://github.com/UmbrellaDocs/linkspector?tab=readme-ov-file#configuration).
+
+### Real-life usage samples
+
+Following is a list of some of the repositories which are using GitHub Action -
+Markdown link check.
+
+1. [dotnet](https://github.com/dotnet/source-build/blob/main/.github/workflows/check-markdown-links.yml)
+1. [dotnet-docker](https://github.com/dotnet/dotnet-docker/blob/main/.github/workflows/check-markdown-links.yml)
+1. [SAP](https://github.com/SAP/abap-file-formats/blob/main/.github/workflows/markdown-link-check.yml)
+1. [Open Telemetry](https://github.com/open-telemetry/opentelemetry-ruby/blob/main/.github/workflows/ci-markdown-link.yml)
+1. [More](https://github.com/search?q=uses%3A+umbrelladocs%2Faction-linkspector%40v1&type=code)
+
+If you are using this on production, consider [buying me a coffee](https://liberapay.com/gaurav-nelson/) ☕.
