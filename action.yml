@@ -43,6 +43,10 @@ inputs:
     description: Specify the path for the Linkspector YML configuration file.
     required: true
     default: .linkspector.yml
+  show_stats:
+    description: Show statistics about the checked links.
+    required: false
+    default: "false"
 runs:
   using: composite
   steps:
@@ -76,6 +80,7 @@ runs:
         INPUT_FAIL_LEVEL: ${{ env.INPUT_FAIL_LEVEL }}
         INPUT_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
         INPUT_CONFIG_FILE: ${{ inputs.config_file }}
+        INPUT_SHOW_STATS: ${{ inputs.show_stats }}
 branding:
   icon: link-2
   color: blue

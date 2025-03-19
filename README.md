@@ -76,6 +76,13 @@ Default is `false`.
 (Optional) Path to your linkspector configuration file `.linkspector.yml`.
 For more details, see [Linkspector configuration](https://github.com/UmbrellaDocs/linkspector?tab=readme-ov-file#configuration).
 
+### `show_stats`
+
+(Optional) Show statistics about the checked links [true,false].
+Default is `false`.
+
+**Note:** Enabling the `show_stats` option causes Linkspector to run twice: once for reporting and again to collect statistics. Using this will increase the total run time of the action.
+
 ### Real-life usage samples
 
 Following is a list of some of the repositories which are using GitHub Action -
