@@ -33,4 +33,11 @@ linkspector check -c "${INPUT_CONFIG_FILE}" -j |
     "${INPUT_REVIEWDOG_FLAGS}"
 exit_code=$?
 echo '::endgroup::'
+
+if [ "${INPUT_SHOW_STATS}" = "true" ]; then
+  echo '::group:: Running linkspector stats ...'
+  linkspector check -c "${INPUT_CONFIG_FILE}" -s || true
+  echo '::endgroup::'
+fi
+
 exit $exit_code
