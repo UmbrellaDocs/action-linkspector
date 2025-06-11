@@ -7,8 +7,17 @@ fi
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
+ARCH=$(uname -m)
+if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+  echo "ARM64 architecture detected. Installing Chromium browser."
+  sudo apt-get update
+  sudo apt-get install -y chromium-browser
+  export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+  export PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+fi
+
 echo '::group::🔗💀 Installing linkspector ... https://github.com/UmbrellaDocs/linkspector'
-npm install -g @umbrelladocs/linkspector@0.4.4
+npm install -g @umbrelladocs/linkspector@0.4.5
 echo '🔗💀 linkspector version:'
 linkspector --version
 echo '::endgroup::'
