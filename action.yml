@@ -55,7 +55,7 @@ runs:
         node-version: 20
     - uses: reviewdog/action-setup@v1
       with:
-        reviewdog_version: v0.20.3
+        reviewdog_version: v0.21.0
     - run: |
         if [ -n "${INPUT_FAIL_LEVEL}" ]; then
             echo "INPUT_FAIL_LEVEL=${INPUT_FAIL_LEVEL}" >> "${GITHUB_ENV}"
