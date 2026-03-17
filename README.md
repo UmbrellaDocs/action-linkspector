@@ -19,7 +19,7 @@ This action runs [Linkspector](https://github.com/UmbrellaDocs/linkspector) with
        name: runner / linkspector
        runs-on: ubuntu-latest
        steps:
-         - uses: actions/checkout@v4
+         - uses: actions/checkout@v5
          - name: Run linkspector
            uses: umbrelladocs/action-linkspector@v1
            with:

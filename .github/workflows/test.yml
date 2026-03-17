@@ -12,7 +12,7 @@ jobs:
     name: runner / linkspector (github-check)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./
         with:
           github_token: ${{ secrets.github_token }}
@@ -24,7 +24,7 @@ jobs:
     name: runner / linkspector (github-pr-check)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./
         with:
           github_token: ${{ secrets.github_token }}
@@ -36,7 +36,7 @@ jobs:
     name: runner / linkspector (github-pr-review)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./
         continue-on-error: true
         with:
