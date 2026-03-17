@@ -53,9 +53,31 @@ runs:
     - uses: actions/setup-node@v5
       with:
         node-version: 24
-    - uses: reviewdog/action-setup@v1
+    - name: Set reviewdog version
+      id: reviewdog-version
+      run: echo "reviewdog_version=v0.21.0" >> "$GITHUB_OUTPUT"
+      shell: bash
+    - name: Cache reviewdog binary
+      id: cache-reviewdog
+      uses: actions/cache@v4
       with:
-        reviewdog_version: v0.21.0
+        path: ~/reviewdog-bin
+        key: reviewdog-${{ runner.os }}-${{ runner.arch }}-${{ steps.reviewdog-version.outputs.reviewdog_version }}
+    - name: Install reviewdog
+      if: steps.cache-reviewdog.outputs.cache-hit != 'true'
+      uses: reviewdog/action-setup@v1
+      with:
+        reviewdog_version: ${{ steps.reviewdog-version.outputs.reviewdog_version }}
+    - name: Copy reviewdog to cache location
+      if: steps.cache-reviewdog.outputs.cache-hit != 'true'
+      run: |
+        mkdir -p ~/reviewdog-bin
+        cp "$(which reviewdog)" ~/reviewdog-bin/
+      shell: bash
+    - name: Add cached reviewdog to PATH
+      if: steps.cache-reviewdog.outputs.cache-hit == 'true'
+      run: echo "$HOME/reviewdog-bin" >> $GITHUB_PATH
+      shell: bash
     - run: |
         if [ -n "${INPUT_FAIL_LEVEL}" ]; then
             echo "INPUT_FAIL_LEVEL=${INPUT_FAIL_LEVEL}" >> "${GITHUB_ENV}"
