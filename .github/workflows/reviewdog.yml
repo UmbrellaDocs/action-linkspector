@@ -4,10 +4,17 @@ on:
     branches:
       - main
   pull_request:
+
+permissions: {}
+
 jobs:
   shellcheck:
     name: runner / shellcheck
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
@@ -26,6 +33,9 @@ jobs:
   shfmt:
     name: runner / shfmt
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
@@ -35,6 +45,9 @@ jobs:
   actionlint:
     name: runner / actionlint
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
@@ -43,3 +56,5 @@ jobs:
         with:
           reporter: github-check
           level: warning
+
+

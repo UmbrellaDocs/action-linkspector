@@ -5,6 +5,10 @@ on:
     - cron: '0 */12 * * *'  # Run every 12 hours
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   check-linkspector-version:
     runs-on: ubuntu-latest
