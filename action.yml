@@ -53,6 +53,7 @@ runs:
     - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
       with:
         node-version: 24
+        package-manager-cache: false
     - name: Set reviewdog version
       id: reviewdog-version
       run: echo "reviewdog_version=v0.21.0" >> "$GITHUB_OUTPUT"
