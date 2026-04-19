@@ -50,7 +50,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v5
+    - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
       with:
         node-version: 24
     - name: Set reviewdog version
@@ -59,13 +59,13 @@ runs:
       shell: bash
     - name: Cache reviewdog binary
       id: cache-reviewdog
-      uses: actions/cache@v4
+      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
       with:
         path: ~/reviewdog-bin
         key: reviewdog-${{ runner.os }}-${{ runner.arch }}-${{ steps.reviewdog-version.outputs.reviewdog_version }}
     - name: Install reviewdog
       if: steps.cache-reviewdog.outputs.cache-hit != 'true'
-      uses: reviewdog/action-setup@v1
+      uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1
       with:
         reviewdog_version: ${{ steps.reviewdog-version.outputs.reviewdog_version }}
     - name: Copy reviewdog to cache location

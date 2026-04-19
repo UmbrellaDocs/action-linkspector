@@ -10,8 +10,10 @@ jobs:
   reviewdog:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: reviewdog/action-depup/with-pr@v1
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          persist-credentials: false
+      - uses: reviewdog/action-depup/with-pr@94a1aaf4e4923064019214b48a43276218af7ad5 # v1
         with:
           file: action.yml
           version_name: reviewdog_version
