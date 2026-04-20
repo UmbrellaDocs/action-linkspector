@@ -9,10 +9,14 @@ on:
     types:
       - labeled
 
+permissions: {}
+
 jobs:
   release:
     if: github.event.action != 'labeled'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
@@ -52,6 +56,9 @@ jobs:
   release-check:
     if: github.event.action == 'labeled'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
