@@ -15,30 +15,34 @@ else
 
 USE_SYSTEM_CHROMIUM=false
 
+# On Linux, prefer an explicitly resolved system Chrome/Chromium binary over
+# Puppeteer's managed browser cache. This avoids breakage when runner images
+# change and Puppeteer expects a browser revision that is not installed.
+if [ "$(uname -s)" = "Linux" ]; then
+  USE_SYSTEM_CHROMIUM=true
+fi
+
 # Puppeteer's bundled Chromium does not support arm64 Linux.
 if [ "$(uname -m)" = "aarch64" ]; then
   USE_SYSTEM_CHROMIUM=true
 fi
 
 # On Ubuntu 24.04, AppArmor restricts unprivileged user namespaces which
-# Chromium's sandbox requires. Try to disable the restriction; if we can't
-# (e.g. self-hosted runners without the sysctl), fall back to system Chromium
-# which ships with proper AppArmor profiles.
+# Chromium's sandbox requires. If the sysctl exists, disable the restriction
+# to improve compatibility with Chrome/Chromium sandboxing.
 # Reference: https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md
-if [ "${USE_SYSTEM_CHROMIUM}" = "false" ] && command -v lsb_release >/dev/null 2>&1 && [ "$(lsb_release -rs)" = "24.04" ]; then
+if command -v lsb_release >/dev/null 2>&1 && [ "$(lsb_release -rs)" = "24.04" ]; then
   if [ -f /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]; then
     echo '::group::🔗💀 Setting up Chrome Linux Sandbox'
     echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
     echo 'Done'
     echo '::endgroup::'
-  else
-    USE_SYSTEM_CHROMIUM=true
   fi
 fi
 
 if [ "${USE_SYSTEM_CHROMIUM}" = "true" ]; then
   echo '::group::🔗💀 Installing system Chromium'
-  echo "Reason: $(uname -m) runner or missing AppArmor sysctl"
+  echo 'Reason: preferring system Chrome/Chromium on Linux'
 
   # Check if Chromium is already installed
   EXISTING_CHROMIUM=""
@@ -103,15 +107,22 @@ linkspector --version
 echo '::endgroup::'
 
 echo '::group:: Running linkspector with reviewdog 🐶 ...'
-linkspector check -c "${INPUT_CONFIG_FILE}" -j |
+tmp_rdjson="$(mktemp)"
+if linkspector check -c "${INPUT_CONFIG_FILE}" -j >"${tmp_rdjson}"; then
   reviewdog -f=rdjson \
     -name="${INPUT_TOOL_NAME}" \
     -reporter="${INPUT_REPORTER}" \
     -filter-mode="${INPUT_FILTER_MODE}" \
     -fail-level="${INPUT_FAIL_LEVEL}" \
     -level="${INPUT_LEVEL}" \
-    "${INPUT_REVIEWDOG_FLAGS}"
-exit_code=$?
+    "${INPUT_REVIEWDOG_FLAGS}" <"${tmp_rdjson}"
+  exit_code=$?
+else
+  exit_code=$?
+  echo '::error::Linkspector failed before producing rdjson output.'
+  cat "${tmp_rdjson}" || true
+fi
+rm -f "${tmp_rdjson}"
 echo '::endgroup::'
 
 if [ "${INPUT_SHOW_STATS}" = "true" ]; then
