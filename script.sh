@@ -20,12 +20,15 @@ if [ "$(uname -m)" = "aarch64" ]; then
   USE_SYSTEM_CHROMIUM=true
 fi
 
-# On Ubuntu 24.04, AppArmor restricts unprivileged user namespaces which
+# Source variables about the OS release.
+. /etc/os-release
+
+# On Ubuntu 24.04 and above, AppArmor restricts unprivileged user namespaces which
 # Chromium's sandbox requires. Try to disable the restriction; if we can't
 # (e.g. self-hosted runners without the sysctl), fall back to system Chromium
 # which ships with proper AppArmor profiles.
 # Reference: https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md
-if [ "${USE_SYSTEM_CHROMIUM}" = "false" ] && command -v lsb_release >/dev/null 2>&1 && [ "$(lsb_release -rs)" = "24.04" ]; then
+if [ "${USE_SYSTEM_CHROMIUM}" = "false" ] && command -v dpkg >/dev/null 2>&1 && [ dpkg --compare-versions "$VERSION_ID" ge "24.04" ]; then
   if [ -f /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]; then
     echo '::group::🔗💀 Setting up Chrome Linux Sandbox'
     echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
