@@ -12,7 +12,10 @@ permissions: {}
 jobs:
   test-check:
     name: runner / linkspector (github-check)
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, ubuntu-26.04]
+    runs-on: ${{ matrix.os }}
     permissions:
       checks: write
       contents: read
@@ -29,7 +32,10 @@ jobs:
   test-pr-check:
     if: github.event_name == 'pull_request'
     name: runner / linkspector (github-pr-check)
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, ubuntu-26.04]
+    runs-on: ${{ matrix.os }}
     permissions:
       checks: write
       contents: read
@@ -47,7 +53,10 @@ jobs:
   test-pr-review:
     if: github.event_name == 'pull_request'
     name: runner / linkspector (github-pr-review)
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, ubuntu-26.04]
+    runs-on: ${{ matrix.os }}
     permissions:
       contents: read
       pull-requests: write
