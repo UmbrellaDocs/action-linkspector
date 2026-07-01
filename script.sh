@@ -28,7 +28,7 @@ fi
 # (e.g. self-hosted runners without the sysctl), fall back to system Chromium
 # which ships with proper AppArmor profiles.
 # Reference: https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md
-if [ "${USE_SYSTEM_CHROMIUM}" = "false" ] && command -v dpkg >/dev/null 2>&1 && [ dpkg --compare-versions "$VERSION_ID" ge "24.04" ]; then
+if [ "${USE_SYSTEM_CHROMIUM}" = "false" ] && command -v dpkg >/dev/null 2>&1 && dpkg --compare-versions "$VERSION_ID" ge "24.04"; then
   if [ -f /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]; then
     echo '::group::🔗💀 Setting up Chrome Linux Sandbox'
     echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
