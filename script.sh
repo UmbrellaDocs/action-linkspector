@@ -100,7 +100,7 @@ fi
 fi # end PUPPETEER_EXECUTABLE_PATH check
 
 echo '::group::🔗💀 Installing linkspector ... https://github.com/UmbrellaDocs/linkspector'
-npm install -g @umbrelladocs/linkspector@0.5.5
+npm install -g @umbrelladocs/linkspector@0.5.6
 echo '🔗💀 linkspector version:'
 linkspector --version
 echo '::endgroup::'
