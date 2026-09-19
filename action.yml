@@ -56,7 +56,7 @@ runs:
         package-manager-cache: false
     - name: Set reviewdog version
       id: reviewdog-version
-      run: echo "reviewdog_version=v0.21.0" >> "$GITHUB_OUTPUT"
+      run: echo "reviewdog_version=v0.21.2" >> "$GITHUB_OUTPUT"
       shell: bash
     - name: Cache reviewdog binary
       id: cache-reviewdog
